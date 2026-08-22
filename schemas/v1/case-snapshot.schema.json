@@ -1,0 +1,195 @@
+{
+  "$defs": {
+    "CaseStatus": {
+      "enum": [
+        "open",
+        "in_progress",
+        "blocked",
+        "ready_for_closure",
+        "closed"
+      ],
+      "title": "CaseStatus",
+      "type": "string"
+    },
+    "ClosureStatus": {
+      "enum": [
+        "not_submitted",
+        "pending_verification",
+        "verified",
+        "rejected"
+      ],
+      "title": "ClosureStatus",
+      "type": "string"
+    },
+    "CompensatingControl": {
+      "additionalProperties": false,
+      "description": "A supplied compensating-control claim with evidence references, not a finding.",
+      "properties": {
+        "control_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Control Reference",
+          "type": "string"
+        },
+        "evidence": {
+          "$ref": "#/$defs/EvidenceReferences"
+        },
+        "rationale": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "control_reference",
+        "rationale",
+        "evidence"
+      ],
+      "title": "CompensatingControl",
+      "type": "object"
+    },
+    "EvidenceReferences": {
+      "additionalProperties": false,
+      "description": "Payload-blind references that bind identifiers to their SHA-256 digests.",
+      "properties": {
+        "evidence_hashes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Hashes",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]{1,63}$",
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_ids",
+        "evidence_hashes"
+      ],
+      "title": "EvidenceReferences",
+      "type": "object"
+    },
+    "ExceptionStatus": {
+      "enum": [
+        "none",
+        "pending",
+        "approved",
+        "rejected",
+        "revoked",
+        "expired"
+      ],
+      "title": "ExceptionStatus",
+      "type": "string"
+    },
+    "RemediationStatus": {
+      "enum": [
+        "open",
+        "in_progress",
+        "blocked",
+        "resolved"
+      ],
+      "title": "RemediationStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Current deterministic workflow state after applying a valid action sequence.",
+  "properties": {
+    "case_id": {
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "title": "Case Id",
+      "type": "string"
+    },
+    "case_status": {
+      "$ref": "#/$defs/CaseStatus"
+    },
+    "closure_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvidenceReferences"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "closure_status": {
+      "$ref": "#/$defs/ClosureStatus"
+    },
+    "compensating_controls": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CompensatingControl"
+      },
+      "title": "Compensating Controls",
+      "type": "array"
+    },
+    "exception_expires_at": {
+      "anyOf": [
+        {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Exception Expires At"
+    },
+    "exception_status": {
+      "$ref": "#/$defs/ExceptionStatus"
+    },
+    "last_action_sequence": {
+      "minimum": 0,
+      "title": "Last Action Sequence",
+      "type": "integer"
+    },
+    "owner_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Owner Id"
+    },
+    "owner_team": {
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "title": "Owner Team",
+      "type": "string"
+    },
+    "remediation_status": {
+      "$ref": "#/$defs/RemediationStatus"
+    },
+    "tenant_id": {
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "tenant_id",
+    "case_status",
+    "remediation_status",
+    "exception_status",
+    "closure_status",
+    "owner_team",
+    "last_action_sequence"
+  ],
+  "title": "CaseSnapshot",
+  "type": "object"
+}

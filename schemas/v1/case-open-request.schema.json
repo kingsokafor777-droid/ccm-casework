@@ -1,0 +1,147 @@
+{
+  "$defs": {
+    "AssessmentStatus": {
+      "enum": [
+        "pass",
+        "fail",
+        "partial",
+        "not_assessed",
+        "error"
+      ],
+      "title": "AssessmentStatus",
+      "type": "string"
+    },
+    "EvidenceReferences": {
+      "additionalProperties": false,
+      "description": "Payload-blind references that bind identifiers to their SHA-256 digests.",
+      "properties": {
+        "evidence_hashes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Hashes",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]{1,63}$",
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_ids",
+        "evidence_hashes"
+      ],
+      "title": "EvidenceReferences",
+      "type": "object"
+    },
+    "RiskLevel": {
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low",
+        "informational"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Source-linked case opening information for one assessed technical control.",
+  "properties": {
+    "assessed_at": {
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+      "title": "Assessed At",
+      "type": "string"
+    },
+    "assessment_manifest_hash": {
+      "title": "Assessment Manifest Hash",
+      "type": "string"
+    },
+    "assessment_status": {
+      "$ref": "#/$defs/AssessmentStatus"
+    },
+    "case_id": {
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "title": "Case Id",
+      "type": "string"
+    },
+    "control_id": {
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "title": "Control Id",
+      "type": "string"
+    },
+    "control_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Control Version",
+      "type": "string"
+    },
+    "due_at": {
+      "anyOf": [
+        {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Due At"
+    },
+    "opened_at": {
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+      "title": "Opened At",
+      "type": "string"
+    },
+    "owner_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Owner Id"
+    },
+    "owner_team": {
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "title": "Owner Team",
+      "type": "string"
+    },
+    "risk": {
+      "$ref": "#/$defs/RiskLevel"
+    },
+    "source_evidence": {
+      "$ref": "#/$defs/EvidenceReferences"
+    },
+    "tenant_id": {
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "tenant_id",
+    "assessment_manifest_hash",
+    "control_id",
+    "control_version",
+    "assessment_status",
+    "risk",
+    "assessed_at",
+    "opened_at",
+    "owner_team",
+    "source_evidence"
+  ],
+  "title": "CaseOpenRequest",
+  "type": "object"
+}

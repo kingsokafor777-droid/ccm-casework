@@ -1,0 +1,119 @@
+{
+  "actions": [
+    {
+      "action_id": "assign_owner",
+      "actor_id": "case_manager_a",
+      "kind": "assign_remediation",
+      "occurred_at": "2026-08-22T01:00:00Z",
+      "owner_id": "team_member_b",
+      "reason": "assign accountable remediation owner",
+      "sequence": 1
+    },
+    {
+      "action_id": "begin_remediation",
+      "actor_id": "team_member_b",
+      "kind": "set_remediation_status",
+      "occurred_at": "2026-08-22T02:00:00Z",
+      "reason": "begin documented remediation work",
+      "remediation_status": "in_progress",
+      "sequence": 2
+    },
+    {
+      "action_id": "request_temporary_exception",
+      "actor_id": "team_member_b",
+      "exception_expires_at": "2026-08-25T00:00:00Z",
+      "kind": "request_exception",
+      "occurred_at": "2026-08-22T03:00:00Z",
+      "reason": "request time-bounded exception during change window",
+      "sequence": 3
+    },
+    {
+      "action_id": "record_compensating_control",
+      "actor_id": "team_member_b",
+      "compensating_control": {
+        "control_reference": "monitoring_alert_review",
+        "evidence": {
+          "evidence_hashes": [
+            "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          ],
+          "evidence_ids": [
+            "evidence_monitoring_alert"
+          ]
+        },
+        "rationale": "documented supplemental monitoring during remediation"
+      },
+      "kind": "add_compensating_control",
+      "occurred_at": "2026-08-22T04:00:00Z",
+      "reason": "record supplied compensating-control reference",
+      "sequence": 4
+    },
+    {
+      "action_id": "reject_exception",
+      "actor_id": "risk_reviewer_a",
+      "exception_decision": "rejected",
+      "kind": "decide_exception",
+      "occurred_at": "2026-08-22T05:00:00Z",
+      "reason": "record supplied exception decision",
+      "sequence": 5
+    },
+    {
+      "action_id": "resolve_remediation",
+      "actor_id": "team_member_b",
+      "kind": "set_remediation_status",
+      "occurred_at": "2026-08-23T01:00:00Z",
+      "reason": "submit remediation completion state",
+      "remediation_status": "resolved",
+      "sequence": 6
+    },
+    {
+      "action_id": "submit_closure",
+      "actor_id": "team_member_b",
+      "closure_evidence": {
+        "evidence_hashes": [
+          "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "evidence_ids": [
+          "evidence_closure_verification"
+        ]
+      },
+      "kind": "submit_closure",
+      "occurred_at": "2026-08-23T02:00:00Z",
+      "reason": "submit payload-blind verification references",
+      "sequence": 7
+    },
+    {
+      "action_id": "verify_closure",
+      "actor_id": "control_reviewer_a",
+      "closure_decision": "verified",
+      "kind": "verify_closure",
+      "occurred_at": "2026-08-23T03:00:00Z",
+      "reason": "record supplied closure verification decision",
+      "sequence": 8
+    }
+  ],
+  "case": {
+    "assessed_at": "2026-08-21T00:00:00Z",
+    "assessment_manifest_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "assessment_status": "partial",
+    "case_id": "case_identity_mfa_coverage",
+    "control_id": "identity_mfa_coverage",
+    "control_version": "1.0.0",
+    "due_at": "2026-08-30T00:00:00Z",
+    "opened_at": "2026-08-22T00:00:00Z",
+    "owner_id": "team_member_a",
+    "owner_team": "cloud_security",
+    "risk": "high",
+    "source_evidence": {
+      "evidence_hashes": [
+        "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      "evidence_ids": [
+        "evidence_identity_mfa"
+      ]
+    },
+    "tenant_id": "demo_tenant"
+  },
+  "due_soon_hours": 168,
+  "evaluated_at": "2026-08-24T00:00:00Z",
+  "schema_version": "ccm.casework/v1"
+}

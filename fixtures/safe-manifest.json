@@ -1,0 +1,210 @@
+{
+  "case": {
+    "assessed_at": "2026-08-21T00:00:00Z",
+    "assessment_manifest_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "assessment_status": "partial",
+    "case_id": "case_identity_mfa_coverage",
+    "control_id": "identity_mfa_coverage",
+    "control_version": "1.0.0",
+    "due_at": "2026-08-30T00:00:00Z",
+    "opened_at": "2026-08-22T00:00:00Z",
+    "owner_id": "team_member_a",
+    "owner_team": "cloud_security",
+    "risk": "high",
+    "source_evidence": {
+      "evidence_hashes": [
+        "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      "evidence_ids": [
+        "evidence_identity_mfa"
+      ]
+    },
+    "tenant_id": "demo_tenant"
+  },
+  "events": [
+    {
+      "action": {
+        "action_id": "assign_owner",
+        "actor_id": "case_manager_a",
+        "kind": "assign_remediation",
+        "occurred_at": "2026-08-22T01:00:00Z",
+        "owner_id": "team_member_b",
+        "reason": "assign accountable remediation owner",
+        "sequence": 1
+      },
+      "event_hash": "sha256:d4c74d65b7eb351c30eae0e5b1e28d3d0b7873c7d450b6a2f523df4408f0cea3",
+      "event_id": "case_event_a4f68bb23bc5f073c3855300"
+    },
+    {
+      "action": {
+        "action_id": "begin_remediation",
+        "actor_id": "team_member_b",
+        "kind": "set_remediation_status",
+        "occurred_at": "2026-08-22T02:00:00Z",
+        "reason": "begin documented remediation work",
+        "remediation_status": "in_progress",
+        "sequence": 2
+      },
+      "event_hash": "sha256:d5a432b6ceaffc95cc4caf2c38976517c9f815671204a9f52d3fed0b915b7f5e",
+      "event_id": "case_event_4b9f4e416ae8f6c7143f51eb",
+      "previous_event_hash": "sha256:d4c74d65b7eb351c30eae0e5b1e28d3d0b7873c7d450b6a2f523df4408f0cea3"
+    },
+    {
+      "action": {
+        "action_id": "request_temporary_exception",
+        "actor_id": "team_member_b",
+        "exception_expires_at": "2026-08-25T00:00:00Z",
+        "kind": "request_exception",
+        "occurred_at": "2026-08-22T03:00:00Z",
+        "reason": "request time-bounded exception during change window",
+        "sequence": 3
+      },
+      "event_hash": "sha256:ecb3b7255db7255c4b53b835d2a753021f95f5c3c32222ca55c572a75c47411e",
+      "event_id": "case_event_73541f9cf8c9f20e1c167404",
+      "previous_event_hash": "sha256:d5a432b6ceaffc95cc4caf2c38976517c9f815671204a9f52d3fed0b915b7f5e"
+    },
+    {
+      "action": {
+        "action_id": "record_compensating_control",
+        "actor_id": "team_member_b",
+        "compensating_control": {
+          "control_reference": "monitoring_alert_review",
+          "evidence": {
+            "evidence_hashes": [
+              "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            ],
+            "evidence_ids": [
+              "evidence_monitoring_alert"
+            ]
+          },
+          "rationale": "documented supplemental monitoring during remediation"
+        },
+        "kind": "add_compensating_control",
+        "occurred_at": "2026-08-22T04:00:00Z",
+        "reason": "record supplied compensating-control reference",
+        "sequence": 4
+      },
+      "event_hash": "sha256:089412dffff5ed1297eb7feef8d7ecb2976967030e7aa007db7f17fbb0a6ff03",
+      "event_id": "case_event_b889c72f4066d6aacd3d3a8e",
+      "previous_event_hash": "sha256:ecb3b7255db7255c4b53b835d2a753021f95f5c3c32222ca55c572a75c47411e"
+    },
+    {
+      "action": {
+        "action_id": "reject_exception",
+        "actor_id": "risk_reviewer_a",
+        "exception_decision": "rejected",
+        "kind": "decide_exception",
+        "occurred_at": "2026-08-22T05:00:00Z",
+        "reason": "record supplied exception decision",
+        "sequence": 5
+      },
+      "event_hash": "sha256:4e48eed00efe70ac84a954fc08aa58afa8609f1a8381df78cb4b5fc3f931a4bd",
+      "event_id": "case_event_522ec487145a53b120ab099f",
+      "previous_event_hash": "sha256:089412dffff5ed1297eb7feef8d7ecb2976967030e7aa007db7f17fbb0a6ff03"
+    },
+    {
+      "action": {
+        "action_id": "resolve_remediation",
+        "actor_id": "team_member_b",
+        "kind": "set_remediation_status",
+        "occurred_at": "2026-08-23T01:00:00Z",
+        "reason": "submit remediation completion state",
+        "remediation_status": "resolved",
+        "sequence": 6
+      },
+      "event_hash": "sha256:091c6e54b58b9ab176c24c0a50d8765866f40a21c72df07a4a3d71042c1e0898",
+      "event_id": "case_event_4382104efb8b180d8c2608d9",
+      "previous_event_hash": "sha256:4e48eed00efe70ac84a954fc08aa58afa8609f1a8381df78cb4b5fc3f931a4bd"
+    },
+    {
+      "action": {
+        "action_id": "submit_closure",
+        "actor_id": "team_member_b",
+        "closure_evidence": {
+          "evidence_hashes": [
+            "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          ],
+          "evidence_ids": [
+            "evidence_closure_verification"
+          ]
+        },
+        "kind": "submit_closure",
+        "occurred_at": "2026-08-23T02:00:00Z",
+        "reason": "submit payload-blind verification references",
+        "sequence": 7
+      },
+      "event_hash": "sha256:799d76eb12775525b35b5bfa1eecd4249cd3e754f2854abd2e21aebcad8fb491",
+      "event_id": "case_event_5fc947346f1b7862abdc3d1d",
+      "previous_event_hash": "sha256:091c6e54b58b9ab176c24c0a50d8765866f40a21c72df07a4a3d71042c1e0898"
+    },
+    {
+      "action": {
+        "action_id": "verify_closure",
+        "actor_id": "control_reviewer_a",
+        "closure_decision": "verified",
+        "kind": "verify_closure",
+        "occurred_at": "2026-08-23T03:00:00Z",
+        "reason": "record supplied closure verification decision",
+        "sequence": 8
+      },
+      "event_hash": "sha256:c8470a178b4fe94e42ee114076cab83bcd1e7233c52567ce19ee5295fef79dd7",
+      "event_id": "case_event_348b712a403f5280355f41c7",
+      "previous_event_hash": "sha256:799d76eb12775525b35b5bfa1eecd4249cd3e754f2854abd2e21aebcad8fb491"
+    }
+  ],
+  "input_hashes": [
+    "sha256:1f262338d020a02796f7e34d7b1e42932c89ca41f8280206640fa0af1ecee64e",
+    "sha256:d47822d4269b962b444a69c5930709c302fe0b5c24e17ebabca92fd61d6cbbce",
+    "sha256:ac9914b70965b83b1df75b3edc336559a820917315421f647f93be87cbe4b868",
+    "sha256:0c90d6c7703aa85ec6a09e9f7213c981a4c9320b6932dd29af5fe9139521888b",
+    "sha256:4fb9632653fefa62cff697928d44ace3b95a6ecd89a3103db21aa54e60eb02e4",
+    "sha256:2e373c2e40ed88b7a9ab10de731ef920646bd877f63e7a607d2cfbe6909ab9d2",
+    "sha256:0bbec3c2873a33950e4df7efe27ef3288ec5e8742e8634f963a836c10e8c8055",
+    "sha256:fbc575305325e477e7d8794be3d5ea090f8a8f0f20673c0dd5daf2bf1294962d",
+    "sha256:2d7df83a1f53f9e8594bb9e1a40721b9581b5381bf871bfe607ea11c6fbb427f"
+  ],
+  "manifest_hash": "sha256:eaa51f0ffc538011bf29adcda478e05e55299dbed377966f8384f631055af1af",
+  "manifest_id": "case_manifest_a78c63f2fdd3e0f754d962c8",
+  "schema_version": "ccm.casework/v1",
+  "sla": {
+    "due_at": "2026-08-30T00:00:00Z",
+    "due_soon_hours": 168,
+    "evaluated_at": "2026-08-24T00:00:00Z",
+    "policy_id": "ccm.casework.sla/v1",
+    "reason": "case is closed; deadline evaluation no longer applies",
+    "state": "not_applicable"
+  },
+  "snapshot": {
+    "case_id": "case_identity_mfa_coverage",
+    "case_status": "closed",
+    "closure_evidence": {
+      "evidence_hashes": [
+        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "evidence_ids": [
+        "evidence_closure_verification"
+      ]
+    },
+    "closure_status": "verified",
+    "compensating_controls": [
+      {
+        "control_reference": "monitoring_alert_review",
+        "evidence": {
+          "evidence_hashes": [
+            "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          ],
+          "evidence_ids": [
+            "evidence_monitoring_alert"
+          ]
+        },
+        "rationale": "documented supplemental monitoring during remediation"
+      }
+    ],
+    "exception_status": "rejected",
+    "last_action_sequence": 8,
+    "owner_id": "team_member_b",
+    "owner_team": "cloud_security",
+    "remediation_status": "resolved",
+    "tenant_id": "demo_tenant"
+  }
+}

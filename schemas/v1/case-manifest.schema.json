@@ -1,0 +1,652 @@
+{
+  "$defs": {
+    "AssessmentStatus": {
+      "enum": [
+        "pass",
+        "fail",
+        "partial",
+        "not_assessed",
+        "error"
+      ],
+      "title": "AssessmentStatus",
+      "type": "string"
+    },
+    "CaseAction": {
+      "additionalProperties": false,
+      "description": "One supplied immutable workflow action with kind-specific closed fields.",
+      "properties": {
+        "action_id": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Action Id",
+          "type": "string"
+        },
+        "actor_id": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "closure_decision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ClosureDecision"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "closure_evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvidenceReferences"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "compensating_control": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CompensatingControl"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "exception_decision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExceptionDecision"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "exception_expires_at": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exception Expires At"
+        },
+        "kind": {
+          "$ref": "#/$defs/CaseActionKind"
+        },
+        "occurred_at": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "owner_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9_]{1,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Id"
+        },
+        "reason": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "remediation_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RemediationStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "sequence": {
+          "maximum": 1000000,
+          "minimum": 1,
+          "title": "Sequence",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "action_id",
+        "sequence",
+        "kind",
+        "actor_id",
+        "occurred_at",
+        "reason"
+      ],
+      "title": "CaseAction",
+      "type": "object"
+    },
+    "CaseActionKind": {
+      "enum": [
+        "assign_remediation",
+        "set_remediation_status",
+        "request_exception",
+        "decide_exception",
+        "add_compensating_control",
+        "revoke_exception",
+        "submit_closure",
+        "verify_closure",
+        "reopen_case"
+      ],
+      "title": "CaseActionKind",
+      "type": "string"
+    },
+    "CaseEvent": {
+      "additionalProperties": false,
+      "description": "Hash-linked, derived event projection over one validated case action.",
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/CaseAction"
+        },
+        "event_hash": {
+          "title": "Event Hash",
+          "type": "string"
+        },
+        "event_id": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "previous_event_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Previous Event Hash"
+        }
+      },
+      "required": [
+        "event_id",
+        "action",
+        "event_hash"
+      ],
+      "title": "CaseEvent",
+      "type": "object"
+    },
+    "CaseOpenRequest": {
+      "additionalProperties": false,
+      "description": "Source-linked case opening information for one assessed technical control.",
+      "properties": {
+        "assessed_at": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+          "title": "Assessed At",
+          "type": "string"
+        },
+        "assessment_manifest_hash": {
+          "title": "Assessment Manifest Hash",
+          "type": "string"
+        },
+        "assessment_status": {
+          "$ref": "#/$defs/AssessmentStatus"
+        },
+        "case_id": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "control_id": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Control Id",
+          "type": "string"
+        },
+        "control_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Control Version",
+          "type": "string"
+        },
+        "due_at": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Due At"
+        },
+        "opened_at": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+          "title": "Opened At",
+          "type": "string"
+        },
+        "owner_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9_]{1,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Id"
+        },
+        "owner_team": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Owner Team",
+          "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/RiskLevel"
+        },
+        "source_evidence": {
+          "$ref": "#/$defs/EvidenceReferences"
+        },
+        "tenant_id": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "case_id",
+        "tenant_id",
+        "assessment_manifest_hash",
+        "control_id",
+        "control_version",
+        "assessment_status",
+        "risk",
+        "assessed_at",
+        "opened_at",
+        "owner_team",
+        "source_evidence"
+      ],
+      "title": "CaseOpenRequest",
+      "type": "object"
+    },
+    "CaseSnapshot": {
+      "additionalProperties": false,
+      "description": "Current deterministic workflow state after applying a valid action sequence.",
+      "properties": {
+        "case_id": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "case_status": {
+          "$ref": "#/$defs/CaseStatus"
+        },
+        "closure_evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvidenceReferences"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "closure_status": {
+          "$ref": "#/$defs/ClosureStatus"
+        },
+        "compensating_controls": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/CompensatingControl"
+          },
+          "title": "Compensating Controls",
+          "type": "array"
+        },
+        "exception_expires_at": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exception Expires At"
+        },
+        "exception_status": {
+          "$ref": "#/$defs/ExceptionStatus"
+        },
+        "last_action_sequence": {
+          "minimum": 0,
+          "title": "Last Action Sequence",
+          "type": "integer"
+        },
+        "owner_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9_]{1,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Id"
+        },
+        "owner_team": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Owner Team",
+          "type": "string"
+        },
+        "remediation_status": {
+          "$ref": "#/$defs/RemediationStatus"
+        },
+        "tenant_id": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "case_id",
+        "tenant_id",
+        "case_status",
+        "remediation_status",
+        "exception_status",
+        "closure_status",
+        "owner_team",
+        "last_action_sequence"
+      ],
+      "title": "CaseSnapshot",
+      "type": "object"
+    },
+    "CaseStatus": {
+      "enum": [
+        "open",
+        "in_progress",
+        "blocked",
+        "ready_for_closure",
+        "closed"
+      ],
+      "title": "CaseStatus",
+      "type": "string"
+    },
+    "ClosureDecision": {
+      "enum": [
+        "verified",
+        "rejected"
+      ],
+      "title": "ClosureDecision",
+      "type": "string"
+    },
+    "ClosureStatus": {
+      "enum": [
+        "not_submitted",
+        "pending_verification",
+        "verified",
+        "rejected"
+      ],
+      "title": "ClosureStatus",
+      "type": "string"
+    },
+    "CompensatingControl": {
+      "additionalProperties": false,
+      "description": "A supplied compensating-control claim with evidence references, not a finding.",
+      "properties": {
+        "control_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Control Reference",
+          "type": "string"
+        },
+        "evidence": {
+          "$ref": "#/$defs/EvidenceReferences"
+        },
+        "rationale": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "control_reference",
+        "rationale",
+        "evidence"
+      ],
+      "title": "CompensatingControl",
+      "type": "object"
+    },
+    "EvidenceReferences": {
+      "additionalProperties": false,
+      "description": "Payload-blind references that bind identifiers to their SHA-256 digests.",
+      "properties": {
+        "evidence_hashes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Hashes",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]{1,63}$",
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_ids",
+        "evidence_hashes"
+      ],
+      "title": "EvidenceReferences",
+      "type": "object"
+    },
+    "ExceptionDecision": {
+      "enum": [
+        "approved",
+        "rejected"
+      ],
+      "title": "ExceptionDecision",
+      "type": "string"
+    },
+    "ExceptionStatus": {
+      "enum": [
+        "none",
+        "pending",
+        "approved",
+        "rejected",
+        "revoked",
+        "expired"
+      ],
+      "title": "ExceptionStatus",
+      "type": "string"
+    },
+    "RemediationStatus": {
+      "enum": [
+        "open",
+        "in_progress",
+        "blocked",
+        "resolved"
+      ],
+      "title": "RemediationStatus",
+      "type": "string"
+    },
+    "RiskLevel": {
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low",
+        "informational"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "SlaEvaluation": {
+      "additionalProperties": false,
+      "description": "Transparent deadline result derived only from supplied request timestamps.",
+      "properties": {
+        "due_at": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Due At"
+        },
+        "due_soon_hours": {
+          "maximum": 8760,
+          "minimum": 1,
+          "title": "Due Soon Hours",
+          "type": "integer"
+        },
+        "evaluated_at": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "hours_until_due": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hours Until Due"
+        },
+        "policy_id": {
+          "const": "ccm.casework.sla/v1",
+          "default": "ccm.casework.sla/v1",
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/SlaState"
+        }
+      },
+      "required": [
+        "evaluated_at",
+        "due_soon_hours",
+        "state",
+        "reason"
+      ],
+      "title": "SlaEvaluation",
+      "type": "object"
+    },
+    "SlaState": {
+      "enum": [
+        "not_applicable",
+        "within_sla",
+        "due_soon",
+        "overdue"
+      ],
+      "title": "SlaState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Sealed result containing source case, immutable action chain, snapshot, and SLA state.",
+  "properties": {
+    "case": {
+      "$ref": "#/$defs/CaseOpenRequest"
+    },
+    "events": {
+      "items": {
+        "$ref": "#/$defs/CaseEvent"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "input_hashes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Input Hashes",
+      "type": "array"
+    },
+    "manifest_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Manifest Hash"
+    },
+    "manifest_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Manifest Id"
+    },
+    "schema_version": {
+      "const": "ccm.casework/v1",
+      "default": "ccm.casework/v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sla": {
+      "$ref": "#/$defs/SlaEvaluation"
+    },
+    "snapshot": {
+      "$ref": "#/$defs/CaseSnapshot"
+    }
+  },
+  "required": [
+    "case",
+    "events",
+    "snapshot",
+    "sla",
+    "input_hashes"
+  ],
+  "title": "CaseManifest",
+  "type": "object"
+}

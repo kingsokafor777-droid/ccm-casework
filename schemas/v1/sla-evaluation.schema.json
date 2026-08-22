@@ -1,0 +1,77 @@
+{
+  "$defs": {
+    "SlaState": {
+      "enum": [
+        "not_applicable",
+        "within_sla",
+        "due_soon",
+        "overdue"
+      ],
+      "title": "SlaState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Transparent deadline result derived only from supplied request timestamps.",
+  "properties": {
+    "due_at": {
+      "anyOf": [
+        {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Due At"
+    },
+    "due_soon_hours": {
+      "maximum": 8760,
+      "minimum": 1,
+      "title": "Due Soon Hours",
+      "type": "integer"
+    },
+    "evaluated_at": {
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "hours_until_due": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Hours Until Due"
+    },
+    "policy_id": {
+      "const": "ccm.casework.sla/v1",
+      "default": "ccm.casework.sla/v1",
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "state": {
+      "$ref": "#/$defs/SlaState"
+    }
+  },
+  "required": [
+    "evaluated_at",
+    "due_soon_hours",
+    "state",
+    "reason"
+  ],
+  "title": "SlaEvaluation",
+  "type": "object"
+}
